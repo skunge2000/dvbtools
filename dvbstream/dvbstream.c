@@ -753,8 +753,8 @@ int main(int argc, char **argv)
   if ( (freq>100000000)) {
     sys = SYS_DVBT;
     if (open_fe(&fd_frontend)) {
-      i=tune_it_s2(fd_frontend,sys,freq,srate,0,tone,specInv,diseqc,modulation,HP_CodeRate,TransmissionMode,guardInterval,bandWidth);
-      if (i < 0) tune_it_s2(fd_frontend,sys,freq,srate,0,tone,specInv,diseqc,modulation,HP_CodeRate,TransmissionMode,guardInterval,bandWidth);
+      i=tune_it(fd_frontend,freq,srate,0,tone,specInv,diseqc,modulation,HP_CodeRate,TransmissionMode,guardInterval,bandWidth);
+      if (i < 0) tune_it(fd_frontend,freq,srate,0,tone,specInv,diseqc,modulation,HP_CodeRate,TransmissionMode,guardInterval,bandWidth);
     }
   } else if ((freq!=0) && (pol!=0) && (srate!=0)) {
     if (open_fe(&fd_frontend)) {

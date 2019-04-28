@@ -453,6 +453,9 @@ int tune_it_s2(int fd_frontend, fe_delivery_system_t sys,unsigned int freq, unsi
         { .cmd = DTV_MODULATION,        .u.data = modulation },
         { .cmd = DTV_SYMBOL_RATE,        .u.data = srate },
         { .cmd = DTV_INNER_FEC,            .u.data = HP_CodeRate },
+	{ .cmd = DTV_BANDWIDTH_HZ, .u.data = bandwidth_hz },
+	{ .cmd = DTV_TRANSMISSION_MODE, .u.data= TransmissionMode },
+	{ .cmd = DTV_GUARD_INTERVAL, .u.data= guardInterval},
         { .cmd = DTV_INVERSION,            .u.data = INVERSION_AUTO },
         { .cmd = DTV_ROLLOFF,            .u.data = ROLLOFF_AUTO },
         { .cmd = DTV_PILOT,                .u.data = PILOT_AUTO },
@@ -463,9 +466,10 @@ int tune_it_s2(int fd_frontend, fe_delivery_system_t sys,unsigned int freq, unsi
     fprintf(stderr,"        DTV_DELIVERY_FREQUENCY = %d (requested: %d)\n",if_freq, freq);
     fprintf(stderr,"        DTV_MODULATION         = %s\n",fe_modulation_tab[modulation]);
     fprintf(stderr,"        DTV_SYMBOL_RATE        = %d\n",srate);
+    fprintf(stderr,"        DTV_TRANSMISSION_MODE  = %d\n",TransmissionMode);
     fprintf(stderr,"        DTV_INNER_FEC          = %s\n",fe_code_rate_tab[HP_CodeRate]);
     fprintf(stderr,"        DTV_INVERSION          = %s\n",fe_spectral_inversion_tab[INVERSION_AUTO]);
-    fprintf(stderr,"        DTV_BANDWIDTH_HZ       = %s\n",fe_bandwidth_tab[bandwidth_hz]);
+    fprintf(stderr,"        DTV_BANDWIDTH_HZ       = %s\n",fe_bandwidth_tab[bandwidth]);
     fprintf(stderr,"        DTV_ROLLOFF            = %s\n",fe_rolloff_tab[ROLLOFF_AUTO]);
     fprintf(stderr,"        DTV_PILOT              = %s\n",fe_pilot_tab[PILOT_AUTO]);
 

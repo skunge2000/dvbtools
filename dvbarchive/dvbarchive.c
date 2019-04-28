@@ -24,7 +24,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
 /* The root for recordings - must include the trailing slash */
-#define OUTDIR "/data3/DVBARCHIVE/"
+#define OUTDIR "/home/stephen/dvb/"
 
 // Enable to use PID 8192 instead of setting individual filters:
 #define USE_8192
@@ -143,7 +143,7 @@ time_t dvb_datetime = 0;
 #define TS_SIZE 188
 #define IN_SIZE TS_SIZE
 
-#define MAX_EXCHANGE_ENTRIES 1024000
+#define MAX_EXCHANGE_ENTRIES 2048000
 
 struct EXCHANGE_BUFFER {
   int nEntries;
@@ -1244,6 +1244,7 @@ fe_transmit_mode_t TransmissionMode=TRANSMISSION_MODE_DEFAULT;
 fe_bandwidth_t bandWidth=BANDWIDTH_DEFAULT;
 fe_guard_interval_t guardInterval=GUARD_INTERVAL_DEFAULT;
 fe_code_rate_t HP_CodeRate=HP_CODERATE_DEFAULT;
+// Default system is DVBS - change it below if not
 fe_delivery_system_t sys = SYS_DVBS;
 fe_code_rate_t fec = FEC_AUTO;
 unsigned int diseqc=1;
@@ -1277,6 +1278,11 @@ char pol=0;
   if (argc==1) {
     fprintf(stderr,"Usage: dvbarchive [OPTIONS] service1 service2 ...8\n\n");
     fprintf(stderr,"\nStandard tuning options:\n\n");
+    fprintf(stderr,"-t          DVB-T transmission system\n");
+    fprintf(stderr,"-t2         DVB-T2 transmission system\n");
+    fprintf(stderr,"-s          DVB-S transmission system\n");
+    fprintf(stderr,"-s2         DVB-S2 transmission system\n");
+
     fprintf(stderr,"-f freq     absolute Frequency (DVB-S in Hz or DVB-T in Hz)\n");
     fprintf(stderr,"            or L-band Frequency (DVB-S in Hz or DVB-T in Hz)\n");
     fprintf(stderr,"-p [H,V]    Polarity (DVB-S only)\n");
@@ -1286,11 +1292,13 @@ char pol=0;
     fprintf(stderr,"-c [0-3]    Use DVB card #[0-3]\n");
     fprintf(stderr,"-D [0-4]    DiSEqC command (0=none)\n\n");
     fprintf(stderr,"-I [0|1|2]  0=Spectrum Inversion off, 1=Spectrum Inversion on, 2=auto\n");
-    fprintf(stderr,"-qam X      DVB-T modulation - 16%s, 32%s, 64%s, 128%s or 256%s\n",(CONSTELLATION_DEFAULT==QAM_16 ? " (default)" : ""),(CONSTELLATION_DEFAULT==QAM_32 ? " (default)" : ""),(CONSTELLATION_DEFAULT==QAM_64 ? " (default)" : ""),(CONSTELLATION_DEFAULT==QAM_128 ? " (default)" : ""),(CONSTELLATION_DEFAULT==QAM_256 ? " (default)" : ""));
-    fprintf(stderr,"-gi N       DVB-T guard interval 1_N (N=128%s, 32%s, 16%s, 8%s or 4%s)\n",(GUARD_INTERVAL_DEFAULT==GUARD_INTERVAL_1_128 ? " (default)" : ""),(GUARD_INTERVAL_DEFAULT==GUARD_INTERVAL_1_32 ? " (default)" : ""),(GUARD_INTERVAL_DEFAULT==GUARD_INTERVAL_1_16 ? " (default)" : ""),(GUARD_INTERVAL_DEFAULT==GUARD_INTERVAL_1_8 ? " (default)" : ""),(GUARD_INTERVAL_DEFAULT==GUARD_INTERVAL_1_4 ? " (default)" : ""));
-    fprintf(stderr,"-cr N       DVB-T code rate. N=AUTO%s, 1_2%s, 2_3%s, 3_4%s, 5_6%s, 7_8%s\n",(HP_CODERATE_DEFAULT==FEC_AUTO ? " (default)" : ""),(HP_CODERATE_DEFAULT==FEC_1_2 ? " (default)" : ""),(HP_CODERATE_DEFAULT==FEC_2_3 ? " (default)" : ""),(HP_CODERATE_DEFAULT==FEC_3_4 ? " (default)" : ""),(HP_CODERATE_DEFAULT==FEC_5_6 ? " (default)" : ""),(HP_CODERATE_DEFAULT==FEC_7_8 ? " (default)" : ""));
-    fprintf(stderr,"-bw N       DVB-T bandwidth (Mhz) - N=6%s, 7%s or 8%s\n",(BANDWIDTH_DEFAULT==BANDWIDTH_6_MHZ ? " (default)" : ""),(BANDWIDTH_DEFAULT==BANDWIDTH_7_MHZ ? " (default)" : ""),(BANDWIDTH_DEFAULT==BANDWIDTH_8_MHZ ? " (default)" : ""));
-    fprintf(stderr,"-tm N       DVB-T transmission mode - N=2%s or 8%s\n",(TRANSMISSION_MODE_DEFAULT==TRANSMISSION_MODE_2K ? " (default)" : ""),(TRANSMISSION_MODE_DEFAULT==TRANSMISSION_MODE_8K ? " (default)" : ""));
+    fprintf(stderr,"-8psk       8PSK modulation\n");
+    fprintf(stderr,"-qpsk       QPSK modulation\n");
+    fprintf(stderr,"-qam N      DVB-T/T2 modulation - 16%s, 32%s, 64%s, 128%s or 256%s\n",(CONSTELLATION_DEFAULT==QAM_16 ? " (default)" : ""),(CONSTELLATION_DEFAULT==QAM_32 ? " (default)" : ""),(CONSTELLATION_DEFAULT==QAM_64 ? " (default)" : ""),(CONSTELLATION_DEFAULT==QAM_128 ? " (default)" : ""),(CONSTELLATION_DEFAULT==QAM_256 ? " (default)" : ""));
+    fprintf(stderr,"-gi N       DVB-T/T2 guard interval 1_N (N=128%s, 32%s, 16%s, 8%s or 4%s)\n",(GUARD_INTERVAL_DEFAULT==GUARD_INTERVAL_1_128 ? " (default)" : ""),(GUARD_INTERVAL_DEFAULT==GUARD_INTERVAL_1_32 ? " (default)" : ""),(GUARD_INTERVAL_DEFAULT==GUARD_INTERVAL_1_16 ? " (default)" : ""),(GUARD_INTERVAL_DEFAULT==GUARD_INTERVAL_1_8 ? " (default)" : ""),(GUARD_INTERVAL_DEFAULT==GUARD_INTERVAL_1_4 ? " (default)" : ""));
+    fprintf(stderr,"-cr N       DVB-T/T2 FEC code rate. N=AUTO%s, 1_2%s, 2_3%s, 3_4%s, 5_6%s, 7_8%s\n",(HP_CODERATE_DEFAULT==FEC_AUTO ? " (default)" : ""),(HP_CODERATE_DEFAULT==FEC_1_2 ? " (default)" : ""),(HP_CODERATE_DEFAULT==FEC_2_3 ? " (default)" : ""),(HP_CODERATE_DEFAULT==FEC_3_4 ? " (default)" : ""),(HP_CODERATE_DEFAULT==FEC_5_6 ? " (default)" : ""),(HP_CODERATE_DEFAULT==FEC_7_8 ? " (default)" : ""));
+    fprintf(stderr,"-bw N       DVB-T/T2 bandwidth (Mhz) - N=6%s, 7%s or 8%s\n",(BANDWIDTH_DEFAULT==BANDWIDTH_6_MHZ ? " (default)" : ""),(BANDWIDTH_DEFAULT==BANDWIDTH_7_MHZ ? " (default)" : ""),(BANDWIDTH_DEFAULT==BANDWIDTH_8_MHZ ? " (default)" : ""));
+    fprintf(stderr,"-tm N       DVB-T/T2 transmission mode - N=2%s, 8%s, 16%s or 32%sk carriers\n",(TRANSMISSION_MODE_DEFAULT==TRANSMISSION_MODE_2K ? " (default)" : ""),(TRANSMISSION_MODE_DEFAULT==TRANSMISSION_MODE_8K ? " (default)" : ""),(TRANSMISSION_MODE_DEFAULT==TRANSMISSION_MODE_16K ? " (default)" : ""),(TRANSMISSION_MODE_DEFAULT==TRANSMISSION_MODE_32K ? " (default)" : ""));
 
     fprintf(stderr,"\n");
     fprintf(stderr,"NOTE: Use pid1=8192 to broadcast whole TS stream from a budget card\n");
@@ -1361,6 +1369,8 @@ char pol=0;
       } else if (strcmp(argv[i],"-tm")==0) {
         i++;
         switch(atoi(argv[i])) {
+	  case 32:   TransmissionMode=TRANSMISSION_MODE_32K; break;
+	  case 16:   TransmissionMode=TRANSMISSION_MODE_16K; break;
           case 8:   TransmissionMode=TRANSMISSION_MODE_8K; break;
           case 2:   TransmissionMode=TRANSMISSION_MODE_2K; break;
           default:
@@ -1416,8 +1426,16 @@ char pol=0;
       } else if (strcmp(argv[i],"-s2")==0) {
         sys = SYS_DVBS2;
         modulation = QPSK;
+        fprintf(stderr,"DVBS2 QPSK selected\n");
+      } else if (strcmp(argv[i],"-t")==0) {
+        sys = SYS_DVBT;
+        fprintf(stderr,"DVBT selected\n");
+      } else if (strcmp(argv[i],"-t2")==0) {
+        sys = SYS_DVBT2;
+        fprintf(stderr,"DVBT2 selected\n");
       } else if (strcmp(argv[i],"-8psk")==0) {
         modulation = PSK_8;
+        fprintf(stderr,"8PSK selected\n");
       } else {
         if (nservices == MAX_SERVICES) {
           fprintf(stderr,"Maximum number of services surpassed, aborting\n");
@@ -1435,12 +1453,15 @@ char pol=0;
   if (signal(SIGALRM, SignalHandler) == SIG_IGN) signal(SIGALRM, SIG_IGN);
   alarm(ALARM_TIME);
 
-  if ( (freq>100000000)) {
-    sys = SYS_DVBT;
+  if ( (freq>100000000) ) {
+         
     if (open_fe(&fd_frontend,card)) {
+      fprintf(stderr, "Tuning to %ld Hz\n", freq);
       i=tune_it_s2(fd_frontend,sys,freq,srate,0,tone,specInv,diseqc,modulation,HP_CodeRate,TransmissionMode,guardInterval,bandWidth);
       if (i < 0) tune_it_s2(fd_frontend,sys,freq,srate,0,tone,specInv,diseqc,modulation,HP_CodeRate,TransmissionMode,guardInterval,bandWidth);
     }
+  
+
   } else if ((freq!=0) && (pol!=0) && (srate!=0)) {
     if (open_fe(&fd_frontend,card)) {
       fprintf(stderr,"Tuning to %ld Hz\n",freq);

@@ -1,4 +1,5 @@
 #include <sys/ioctl.h>
+#include <stdint.h>
 #include <time.h>
 #include <unistd.h>
 #include <stdio.h>

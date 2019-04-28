@@ -41,7 +41,7 @@
    make FINLAND=1
 */
 
-//#define UK
+#define UK
 //#define FINLAND
 //#define FINLAND2
 //#define SPAIN

@@ -15,3 +15,13 @@ service name with the LCN (logical channel number) if available.
 
 TDT - Freeview broadcasts every second.  Sky transponders appear to be every 10 seconds.  Freesat is ???.  Spain TDT is ???
 
+This was originally written by Dave Chapman / LinuxSTB
+
+**** MY CHANGES BELOW ****
+
+I've modified it a bit to add command line options for DVB-T/T2/S/S2 and to add support for 32k and 16k carrier DVB-T2 options.
+
+dvbarchive run without any arguments will list the command line options - and I've added mine to this.
+
+I've tweaked the makefile so that it runs on Ubuntu and Raspbian in 2019, and increased the size of a buffer that otherwise 
+seemed to cause crashes.  It's still very much a WIP.

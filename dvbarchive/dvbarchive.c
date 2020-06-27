@@ -1358,10 +1358,10 @@ char pol=0;
         i++;
         switch(atoi(argv[i])) {
           case 128:  guardInterval=GUARD_INTERVAL_1_128; break;
-          case 32:  guardInterval=GUARD_INTERVAL_1_32; break;
-          case 16:  guardInterval=GUARD_INTERVAL_1_16; break;
-          case 8:   guardInterval=GUARD_INTERVAL_1_8; break;
-          case 4:   guardInterval=GUARD_INTERVAL_1_4; break;
+          case 32:   guardInterval=GUARD_INTERVAL_1_32; break;
+          case 16:   guardInterval=GUARD_INTERVAL_1_16; break;
+          case 8:    guardInterval=GUARD_INTERVAL_1_8; break;
+          case 4:    guardInterval=GUARD_INTERVAL_1_4; break;
           default:
             fprintf(stderr,"Invalid Guard Interval: %s\n",argv[i]);
             exit(0);

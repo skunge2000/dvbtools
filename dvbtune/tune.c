@@ -449,16 +449,16 @@ int tune_it_s2(int fd_frontend, fe_delivery_system_t sys,unsigned int freq, unsi
     struct dvb_frontend_event ev;
     struct dtv_property p_tune[] = {
         { .cmd = DTV_DELIVERY_SYSTEM,    .u.data = sys },
-        { .cmd = DTV_FREQUENCY,            .u.data = if_freq },
-        { .cmd = DTV_MODULATION,        .u.data = modulation },
+        { .cmd = DTV_FREQUENCY,          .u.data = if_freq },
+        { .cmd = DTV_MODULATION,         .u.data = modulation },
         { .cmd = DTV_SYMBOL_RATE,        .u.data = srate },
-        { .cmd = DTV_INNER_FEC,            .u.data = HP_CodeRate },
-	{ .cmd = DTV_BANDWIDTH_HZ, .u.data = bandwidth_hz },
-	{ .cmd = DTV_TRANSMISSION_MODE, .u.data= TransmissionMode },
-	{ .cmd = DTV_GUARD_INTERVAL, .u.data= guardInterval},
-        { .cmd = DTV_INVERSION,            .u.data = INVERSION_AUTO },
+        { .cmd = DTV_INNER_FEC,          .u.data = HP_CodeRate },
+	      { .cmd = DTV_BANDWIDTH_HZ,       .u.data = bandwidth_hz },
+	      { .cmd = DTV_TRANSMISSION_MODE,  .u.data= TransmissionMode },
+	      { .cmd = DTV_GUARD_INTERVAL,     .u.data= guardInterval},
+        { .cmd = DTV_INVERSION,          .u.data = INVERSION_AUTO },
         { .cmd = DTV_ROLLOFF,            .u.data = ROLLOFF_AUTO },
-        { .cmd = DTV_PILOT,                .u.data = PILOT_AUTO },
+        { .cmd = DTV_PILOT,              .u.data = PILOT_AUTO },
         { .cmd = DTV_TUNE },
     };
 

@@ -826,8 +826,8 @@ int main(int argc, char **argv)
       } else if (strcmp(argv[i],"-tm")==0) {
         i++;
         switch(atoi(argv[i])) {
-	  case 32:   TransmissionMode=TRANSMISSION_MODE_32K; break;
-          case 16:   TransmissionMode=TRANSMISSION_MODE_16K; break;
+	        case 32:  TransmissionMode=TRANSMISSION_MODE_32K; break;
+          case 16:  TransmissionMode=TRANSMISSION_MODE_16K; break;
           case 8:   TransmissionMode=TRANSMISSION_MODE_8K; break;
           case 2:   TransmissionMode=TRANSMISSION_MODE_2K; break;
           default:
